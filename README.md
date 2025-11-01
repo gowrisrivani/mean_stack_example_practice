@@ -39,7 +39,7 @@ It’s a **full-stack CRUD application** built using **MongoDB, Express, Angular
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/<your-username>/mean-stack-example.git
+git clone https://github.com/gowrisrivani/mean_stack_example_practice.git
 cd mean-stack-example
 ```
 ### 2. Set up and run the backend
@@ -52,7 +52,7 @@ Server will start on:
 👉 http://localhost:3000
 ### 3. Set up and run the frontend
 ```bash
-cd ../client
+cd client
 npm install
 npm start
 ```
