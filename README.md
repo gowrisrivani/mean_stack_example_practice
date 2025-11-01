@@ -73,7 +73,7 @@ You can run the entire application using Docker — either by using pre-built im
 
 ### 🧩 Option 1 — Use Pre-Built Images from Docker Hub
 
-If you’ve already pushed the images to your Docker Hub account (`gowrisrivani`):
+Open Terminal:
 
 ```bash
 docker pull gowrisrivani/mean-stack-example-client
