@@ -1,67 +1,38 @@
-# MEAN Stack Sample Application
+# 🧩 MEAN Stack Employee Management System
 
-This is a simple CRUD application built using the MEAN (MongoDB, Express, Angular, Node.js) stack. You can also follow the step-by-step [tutorial](https://www.mongodb.com/languages/mean-stack-tutorial) for building this application.
+This project is an **enhanced version** of the official [MongoDB Developer MEAN Stack Example](https://github.com/mongodb-developer/mean-stack-example).  
+It’s a **full-stack CRUD application** built using **MongoDB, Express, Angular, and Node.js**, with additional features and Docker support for easier deployment.
 
-![Demonstration of the web application](mean-demo.gif)
+---
 
-## How To Run
+## 🚀 Features
 
-Set your [Atlas URI connection string](https://docs.atlas.mongodb.com/getting-started/) as a parameter in `server/.env`. Make sure you replace the username and password placeholders with your own credentials.
+### 🔹 Original Functionality
+- Full **CRUD (Create, Read, Update, Delete)** operations for employees
+- RESTful API built with **Express.js**
+- Angular-based frontend for managing employees
+- MongoDB integration for persistent data storage
 
-```
-ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.jadwj.mongodb.net/meanStackExample?retryWrites=true&w=majority
-```
+### 🔹 Added / Improved Features
+- 🆕 **Employee ID field**: Each employee now has a unique Employee ID (entered by the user and stored in DB).
+- 🔍 **Search functionality**: Search employees by **name** or **employee ID**.
+- 🏢 **Department module**: New Department collection with full CRUD functionality.
+- 🔗 **Employee–Department relationship**: Each employee is linked to a department.
+- 🐳 **Dockerized client and server**: Easily run both frontend and backend using Docker.
 
-Start the server and client applications:
-```
-npm start
-```
+---
 
-When both applications are built and running, open your browser on http://localhost:4200/.
+## 🧱 Tech Stack
+
+| Layer | Technology |
+|-------|-------------|
+| Frontend | Angular |
+| Backend | Node.js, Express.js |
+| Database | MongoDB |
+| Containerization | Docker |
+
+---
+
+## ⚙️ Project Structure
 
 
-## Contributors ✨
-
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center">
-        <a href="https://github.com/AbiramiSukumaran">
-            <img src="https://avatars.githubusercontent.com/u/13735898?v=4" width="100px;" alt=""/><br />
-            <sub><b>Abirami Sukumaran</b></sub>
-        </a><br />
-    </td>
-    <td align="center">
-        <a href="https://twitter.com/StanimiraVlaeva">
-            <img src="https://avatars.githubusercontent.com/u/7893485?v=4" width="100px;" alt=""/><br />
-            <sub><b>Stanimira Vlaeva</b></sub>
-        </a><br />
-    </td>
-    <td align="center">
-        <a href="https://www.linkedin.com/in/abdulahosama">
-            <img src="https://avatars.githubusercontent.com/u/51336081?v=4" width="100px;" alt=""/><br />
-            <sub><b>Abdullah Osama</b></sub>
-        </a><br />
-    </td>
-    <td align="center">
-        <a href="https://bleything.net/">
-            <img src="https://avatars.githubusercontent.com/u/270?v=4" width="100px;" alt=""/><br />
-            <sub><b>Ben Bleything</b></sub>
-        </a><br />
-    </td>
-    <td align="center">
-        <a href="https://youtube.com/codestackr/">
-            <img src="https://avatars.githubusercontent.com/u/52665907?v=4" width="100px;" alt=""/><br />
-            <sub><b>Jesse Hall @codeSTACKr</b></sub>
-        </a><br />
-    </td>
-  </tr>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-## Disclaimer
-
-Use at your own risk; not a supported MongoDB product
