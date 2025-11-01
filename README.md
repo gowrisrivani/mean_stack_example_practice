@@ -118,30 +118,6 @@ Access:
 Frontend: http://localhost:4200
 Backend: http://localhost:5200
 
-## 🧠 API Overview
-
-### 🔹 Employee Endpoints
-
-| Method | Endpoint | Description |
-|--------|-----------|--------------|
-| GET | `/api/employees` | Get all employees |
-| GET | `/api/employees/:id` | Get a specific employee |
-| POST | `/api/employees` | Create a new employee |
-| PUT | `/api/employees/:id` | Update an existing employee |
-| DELETE | `/api/employees/:id` | Delete an employee |
-
----
-
-### 🔹 Department Endpoints
-
-| Method | Endpoint | Description |
-|--------|-----------|--------------|
-| GET | `/api/departments` | Get all departments |
-| GET | `/api/departments/:id` | Get a specific department |
-| POST | `/api/departments` | Create a new department |
-| PUT | `/api/departments/:id` | Update a department |
-| DELETE | `/api/departments/:id` | Delete a department |
-
 ## 🤝 Contributing
 
 Feel free to **fork** this repository, **enhance features**, or **open issues and pull requests** to improve the project!
