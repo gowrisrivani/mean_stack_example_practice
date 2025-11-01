@@ -4,7 +4,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
 import { Employee } from '../employee';
+import { Department } from '../department';
+import { DepartmentService } from '../department.service';
+import { EmployeeService } from '../employee.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-employee-form',
@@ -15,6 +20,8 @@ import { Employee } from '../employee';
     MatInputModule,
     MatRadioModule,
     MatButtonModule,
+    MatSelectModule,
+    CommonModule,
   ],
   styles: `
     .employee-form {
@@ -38,6 +45,14 @@ import { Employee } from '../employee';
       (submit)="submitForm()"
     >
       <mat-form-field>
+        <mat-label>Empid</mat-label>
+        <input matInput placeholder="EmpId" formControlName="empid" required />
+        @if (empid?.invalid) {
+        <mat-error>Empid must be a number.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field>
         <mat-label>Name</mat-label>
         <input matInput placeholder="Name" formControlName="name" required />
         @if (name.invalid) {
@@ -59,7 +74,7 @@ import { Employee } from '../employee';
       </mat-form-field>
 
       <mat-radio-group formControlName="level" aria-label="Select an option">
-        <mat-radio-button name="level" value="junior" required 
+        <mat-radio-button name="level" value="junior" required
           >Junior</mat-radio-button
         >
         <mat-radio-button name="level" value="mid"
@@ -69,6 +84,19 @@ import { Employee } from '../employee';
           >Senior</mat-radio-button
         >
       </mat-radio-group>
+
+      <mat-form-field>
+        <mat-label>Department</mat-label>
+        <mat-select formControlName="departmentId" required>
+          @for (department of departments(); track department._id) {
+            <mat-option [value]="department._id">{{ department.name }}</mat-option>
+          }
+        </mat-select>
+        @if (departmentId.invalid) {
+        <mat-error>Department is required.</mat-error>
+        }
+      </mat-form-field>
+
       <br />
       <button
         mat-raised-button
@@ -90,22 +118,34 @@ export class EmployeeFormComponent {
   @Output()
   formSubmitted = new EventEmitter<Employee>();
 
+  departments = this.employeeService.departments$;
+
   employeeForm = this.formBuilder.group({
+    empid: [0, [Validators.required, Validators.pattern(/^\d+$/)]],
     name: ['', [Validators.required, Validators.minLength(3)]],
     position: ['', [Validators.required, Validators.minLength(5)]],
     level: ['junior', [Validators.required]],
+    departmentId: ['', [Validators.required]],
   });
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private departmentService: DepartmentService, private employeeService: EmployeeService) {
+    this.departmentService.getDepartments();
     effect(() => {
-      this.employeeForm.setValue({
-        name: this.initialState()?.name || '',
-        position: this.initialState()?.position || '',
-        level: this.initialState()?.level || 'junior',
-      });
+      if (this.initialState()) {
+        this.employeeForm.setValue({
+          empid: this.initialState()?.empid || 0,
+          name: this.initialState()?.name || '',
+          position: this.initialState()?.position || '',
+          level: this.initialState()?.level || 'junior',
+          departmentId: this.initialState()?.departmentId || '',
+        });
+      }
     });
   }
 
+  get empid(){
+    return this.employeeForm.get('empid')
+  }
   get name() {
     return this.employeeForm.get('name')!;
   }
@@ -116,7 +156,13 @@ export class EmployeeFormComponent {
     return this.employeeForm.get('level')!;
   }
 
+  get departmentId() {
+    return this.employeeForm.get('departmentId')!;
+  }
+
   submitForm() {
-    this.formSubmitted.emit(this.employeeForm.value as Employee);
+    const formValue = this.employeeForm.value;
+    formValue.empid = Number(formValue.empid);
+    this.formSubmitted.emit(formValue as Employee);
   }
 }

@@ -1,7 +1,9 @@
 import * as mongodb from "mongodb";
 import { Employee } from "./employee";
+import { Department } from "./department";
 
 export const collections: {
+    department?: mongodb.Collection<Department>;
     employees?: mongodb.Collection<Employee>;
 } = {};
 
@@ -10,22 +12,65 @@ export async function connectToDatabase(uri: string) {
     await client.connect();
 
     const db = client.db("meanStackExample");
-    await applySchemaValidation(db);
+
+    // Apply schema validation for both collections
+    await applyDepartmentSchema(db);
+    await applyEmployeeSchema(db);
+
+    // Assign collections
+    const departmentCollection = db.collection<Department>("department");
+    collections.department = departmentCollection;
 
     const employeesCollection = db.collection<Employee>("employees");
     collections.employees = employeesCollection;
+
+    console.log("Connected to database and collections are ready.");
 }
 
-// Update our existing collection with JSON schema validation so we know our documents will always match the shape of our Employee model, even if added elsewhere.
-// For more information about schema validation, see this blog series: https://www.mongodb.com/blog/post/json-schema-validation--locking-down-your-model-the-smart-way
-async function applySchemaValidation(db: mongodb.Db) {
-    const jsonSchema = {
+// ---------------------
+// Department Schema Validation
+// ---------------------
+async function applyDepartmentSchema(db: mongodb.Db) {
+    const departmentSchema = {
         $jsonSchema: {
             bsonType: "object",
-            required: ["name", "position", "level"],
+            required: ["name"],
             additionalProperties: false,
             properties: {
                 _id: {},
+                name: {
+                    bsonType: "string",
+                    description: "'name' is required and is a string"
+                }
+            }
+        }
+    };
+
+    await db.command({
+        collMod: "department",
+        validator: departmentSchema
+    }).catch(async (error: mongodb.MongoServerError) => {
+        if (error.codeName === "NamespaceNotFound") {
+            await db.createCollection("department", { validator: departmentSchema });
+        }
+    });
+}
+
+// ---------------------
+// Employee Schema Validation
+// ---------------------
+async function applyEmployeeSchema(db: mongodb.Db) {
+    const employeeSchema = {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["empid", "name", "position", "level", "departmentId"],
+            additionalProperties: false,
+            properties: {
+                _id: {},
+                empid: {
+                    bsonType: "number",
+                    description: "'empid' is required and is a number"
+                },
                 name: {
                     bsonType: "string",
                     description: "'name' is required and is a string",
@@ -40,17 +85,20 @@ async function applySchemaValidation(db: mongodb.Db) {
                     description: "'level' is required and is one of 'junior', 'mid', or 'senior'",
                     enum: ["junior", "mid", "senior"],
                 },
+                departmentId: {
+                    bsonType: "objectId",
+                    description: "'departmentId' is required and is an ObjectId"
+                },
             },
         },
     };
 
-    // Try applying the modification to the collection, if the collection doesn't exist, create it 
-   await db.command({
+    await db.command({
         collMod: "employees",
-        validator: jsonSchema
+        validator: employeeSchema
     }).catch(async (error: mongodb.MongoServerError) => {
         if (error.codeName === "NamespaceNotFound") {
-            await db.createCollection("employees", {validator: jsonSchema});
+            await db.createCollection("employees", { validator: employeeSchema });
         }
     });
 }
